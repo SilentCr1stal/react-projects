@@ -32,29 +32,48 @@ code {
   .wrap {
     display: flex;
     width: 100%;
+    position: relative;
+    height: 100vh;
     justify-content: center;
+    align-items: center;
 
     .modal {
+      position: absolute;
       width: 240px;
       padding: 20px 35px;
       background-color: #ffffff;
       border-radius: 20px;
       cursor: pointer;
+      visibility: hidden;
+      opacity: 0;
+      transition: all .5s;
       &__header {
         font-size: 28px;
         span {
           font-size: 28px;
         }
       }
+      &.show {
+        visibility: visible;
+        opacity: 1;
+      }
     }
 
     .overlay {
+      position: absolute;
       height: 100vh;
       width: 100%;
       display: flex;
       justify-content: center;
       align-items: center;
       background: rgba(0, 0, 0, 0.3);
+      visibility: hidden;
+      opacity: 0;
+      transition: all .5s;
+      &.show {
+        visibility: visible;
+        opacity: 1;
+      }
       &__wrap {
         padding: 20px 35px;
         background-color: #ffffff;
@@ -73,4 +92,7 @@ code {
       }
     }
   }
+}
+.animated {
+  transition: all .5s;
 }
