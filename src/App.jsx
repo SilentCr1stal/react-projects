@@ -1,3 +1,5 @@
+import React from "react";
+
 const questions = [
   {
     title: 'React - это ... ?',
@@ -47,6 +49,13 @@ function Game() {
 }
 
 function App() {
+  const [step, setStep] = React.useState(0)
+
+  const question = questions[step]
+
+  console.log(question);
+  
+
   return (
     <div className="App">
       <Game />
