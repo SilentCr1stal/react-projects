@@ -5,17 +5,34 @@ import { Users } from './components/users';
 
 function App() {
   const [users, setUsers] = React.useState([])
+  const [invites, setInvites] = React.useState([])
   const [isLoading, setLoading] = React.useState(true)
+  const [value, setValue] = React.useState('')
+  const [success, setSuccess] = React.useState(false)
+
+  const onClickSendInvites = () => {
+    setSuccess(true)
+  }
+
+  const onClickInviteUser = id => {
+    if (invites.includes(id))
+      setInvites(prev => prev.filter(_id => _id !== id))
+    else
+      setInvites(prev => [...prev, id])
+  }
+
+  const onChangeSetValue = e => {
+    setValue(prev => prev = e.target.value)
+  }
 
   React.useEffect(() => {
     try {
       fetch('https://reqres.in/api/users').then(res => res.json()).then(json => {
         console.log(json.data);
         setUsers(json.data)
-        setLoading(false)
       }).catch(err => {
         console.error('Error - ', err)
-      })
+      }).finally(() => setLoading(false))
     } catch (error) {
       console.error('Error - ', error)
     }
@@ -23,8 +40,10 @@ function App() {
 
   return (
     <div className="App">
-      <Users items={users} isLoading={isLoading}/>
-      {/* <Success /> */}
+      {success ? <Success count={invites.length}/> : (
+        <Users value={value} onChangeSetValue={onChangeSetValue} items={users}
+          isLoading={isLoading} onClickInviteUser={onClickInviteUser} invites={invites} onClickSendInvites={onClickSendInvites}/>
+      )}
     </div>
   );
 }

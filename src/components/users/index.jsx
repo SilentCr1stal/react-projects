@@ -2,14 +2,18 @@ import React from 'react';
 import { Skeleton } from './Skeleton';
 import { User } from './User';
 
-export const Users = ({ items, isLoading }) => {
+export const Users = ({ value, onChangeSetValue, items, isLoading, invites, onClickInviteUser, onClickSendInvites }) => {
+  console.log(value);
+  console.log('invites', invites);
+  
+
   return (
     <>
       <div className="search">
         <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
           <path d="M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z" />
         </svg>
-        <input type="text" placeholder="Найти пользователя..." />
+        <input value={value} onChange={onChangeSetValue} type="text" placeholder="Найти пользователя..." />
       </div>
       {isLoading ? (
         <div className="skeleton-list">
@@ -20,13 +24,15 @@ export const Users = ({ items, isLoading }) => {
       ) : (
         <ul className="users-list">
           {
-            items.map((user, i) => (
-              <User key={user.id} {...user} />
-            ))
+            items.filter(user =>
+              user.first_name.includes(value) || user.last_name.includes(value) || user.email.includes(value))
+              .map((user, i) => (
+                <User key={i} {...user} onClickInviteUser={onClickInviteUser} isInvited={invites.includes(user.id)} />
+              ))
           }
         </ul>
       )}
-      <button className="send-invite-btn">Отправить приглашение</button>
+      {invites.length > 0 && <button onClick={() => onClickSendInvites()} className="send-invite-btn">Отправить приглашение</button>}
     </>
   );
 };
